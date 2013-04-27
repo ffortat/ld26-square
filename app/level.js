@@ -40,11 +40,18 @@ Level.prototype.init = function(level) {
 			squareid = tileset.firstgid;
 			circleid = tileset.firstgid + 1;
 		} else {
+			var filename = tileset.image;
+			var uri = 'images' + filename.substr(filename.lastIndexOf('/'));
+
 			this.tilesets[index] = {
 				image : new Image(),
 				width : tileset.tilewidth,
 				height : tileset.tileheight
 			};
+
+			load.image(uri, function (image) {
+				self.tilesets[index].image = image;
+			});
 
 			for (var i = 0; i < tileset.imageheight; i += tileset.tileheight) {
 				for (var j = 0; j < tileset.imagewidth; j += tileset.tilewidth) {
@@ -55,21 +62,20 @@ Level.prototype.init = function(level) {
 					};
 				}
 			}
-
-			var filename = tileset.image;
-			var uri = 'images' + filename.substr(filename.lastIndexOf('/'));
-
-			load.image(uri, function (image) {
-				self.tilesets[index].image = image;
-			});
 		}
 	}, this);
+
+	this.layers = level.layers;
+	this.width = level.width;
+	this.height = level.height;
+	this.tile.width = level.tilewidth;
+	this.tile.height = level.tileheight;
 
 	level.layers.some(function (layer) {
 		if (layer.name === 'Placeholders') {
 			layer.data.forEach(function (tileid, index) {
 				var x = index % layer.width;
-				var y = Math.floor(index / layer.height);
+				var y = Math.floor(index / layer.width);
 
 				if (tileid === squareid) {
 					this.square = new Square(x, y, this);
@@ -82,20 +88,19 @@ Level.prototype.init = function(level) {
 		}
 	}, this);
 
-	this.layers = level.layers;
-	this.width = level.width;
-	this.height = level.height;
-	this.tile.width = level.tilewidth;
-	this.tile.height = level.tileheight;
-
 	load.ready(function () {
 		self.loaded = true;
 	});
 };
 
+Level.prototype.updatecamera = function(x, y) {
+	this.window.x = Math.min(Math.max(0, x - canvas.width / 2), this.width * this.tile.width - canvas.width);
+	this.window.y = Math.min(Math.max(0, y - canvas.height / 2), this.height * this.tile.height - canvas.height);
+};
+
 Level.prototype.tick = function(length) {
 	if (this.loaded) {
-
+		this.square.tick(length);
 	}
 };
 
@@ -116,5 +121,7 @@ Level.prototype.draw = function() {
 				}, this);
 			}
 		}, this);
+
+		this.square.draw(this.window);
 	}
 };

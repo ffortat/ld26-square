@@ -9,6 +9,7 @@ www/square.global.js : \
 	app/libs/ajax.js \
 	app/libs/loader.js \
 	app/canvas.js \
+	app/states.js \
 	app/square.js \
 	app/circle.js \
 	app/level.js \
