@@ -21,4 +21,5 @@ Tools
 
 * Sublime Text 2
 * GraphicsGale
+* Tiled
 * Construct 2 (for prototyping)
