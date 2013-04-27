@@ -1,2 +1,3 @@
 syntax : glob
 www/square.*
+*.capx.backup*
