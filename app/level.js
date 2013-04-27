@@ -31,7 +31,7 @@ Level.prototype.init = function(level) {
 	level.tilesets.forEach(function (tileset, index) {
 		this.tilesets[index] = {
 			image : new Image(),
-			tiles : [],
+			tiles : [null],
 			width : tileset.tilewidth,
 			height : tileset.tileheight
 		};
@@ -60,7 +60,7 @@ Level.prototype.init = function(level) {
 	this.tile.height = level.tileheight;
 
 	load.ready(function () {
-		this.loaded = true;
+		self.loaded = true;
 	});
 };
 
@@ -79,9 +79,11 @@ Level.prototype.draw = function() {
 		this.layers.forEach(function (layer) {
 			if (layer.visible) {
 				layer.data.forEach(function (tile, index) {
-					var x = index % this.width;
-					var y = Math.floor(index / this.width);
-					context.drawImage(tileset.image, tileset.tiles[tile].x, tileset.tiles[tile].y, width, height, x, y, width, height)
+					if (tile > 0) {
+						var x = index % this.width * this.tile.width;
+						var y = Math.floor(index / this.width) * this.tile.height;
+						context.drawImage(tileset.image, tileset.tiles[tile].x, tileset.tiles[tile].y, width, height, x, y, width, height);
+					}
 				}, this);
 			}
 		}, this);

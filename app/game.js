@@ -5,6 +5,8 @@ function Game() {
 Game.prototype.tick = function(length) {
 	this.level.tick(length);
 	// this.hud.tick();
+
+	this.draw();
 };
 
 Game.prototype.draw = function() {
