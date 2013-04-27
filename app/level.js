@@ -19,6 +19,9 @@ function Level(name) {
 		height : 0
 	};
 
+	this.square = {};
+	this.circles = [];
+
 	this.loaded = false;
 
 	load.json('levels/' + name + '.json', function (data) {self.init(data);});
@@ -27,32 +30,57 @@ function Level(name) {
 Level.prototype.init = function(level) {
 	var self = this;
 
+	var squareid = 0;
+	var circleid = 0;
+
 	this.json = level;
 
 	level.tilesets.forEach(function (tileset, index) {
-		this.tilesets[index] = {
-			image : new Image(),
-			width : tileset.tilewidth,
-			height : tileset.tileheight
-		};
+		if (tileset.name === 'Placeholders') {
+			squareid = tileset.firstgid;
+			circleid = tileset.firstgid + 1;
+		} else {
+			this.tilesets[index] = {
+				image : new Image(),
+				width : tileset.tilewidth,
+				height : tileset.tileheight
+			};
 
-		for (var i = 0; i < tileset.imageheight; i += tileset.tileheight) {
-			for (var j = 0; j < tileset.imagewidth; j += tileset.tilewidth) {
-				this.tiles[tileset.firstgid + i / tileset.tileheight * (tileset.imagewidth / tileset.tilewidth) + j / tileset.tilewidth] = {
-					x : j,
-					y : i,
-					set : index
-				};
+			for (var i = 0; i < tileset.imageheight; i += tileset.tileheight) {
+				for (var j = 0; j < tileset.imagewidth; j += tileset.tilewidth) {
+					this.tiles[tileset.firstgid + i / tileset.tileheight * (tileset.imagewidth / tileset.tilewidth) + j / tileset.tilewidth] = {
+						x : j,
+						y : i,
+						set : index
+					};
+				}
 			}
+
+			var filename = tileset.image;
+			var uri = 'images' + filename.substr(filename.lastIndexOf('/'));
+
+			load.image(uri, function (image) {
+				self.tilesets[index].image = image;
+			});
 		}
+	}, this);
 
-		var filename = tileset.image;
-		var uri = 'images' + filename.substr(filename.lastIndexOf('/'));
+	level.layers.some(function (layer) {
+		if (layer.name === 'Placeholders') {
+			layer.data.forEach(function (tileid, index) {
+				var x = index % layer.width;
+				var y = Math.floor(index / layer.height);
 
-		load.image(uri, function (image) {
-			self.tilesets[index].image = image;
-		});
-	}, this)
+				if (tileid === squareid) {
+					this.square = new Square(x, y, this);
+				} else if (tileid === circleid) {
+					this.circles.push(new Circle(x, y, this));
+				}
+			}, this);
+
+			return true;
+		}
+	}, this);
 
 	this.layers = level.layers;
 	this.width = level.width;
