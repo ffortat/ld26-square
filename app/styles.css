@@ -1,0 +1,15 @@
+* {
+	margin : 0px;
+	padding : 0px;
+}
+
+body {
+	background-color : #000000;
+}
+
+canvas#game {
+	position : absolute;
+	top : 50%;
+	left : 50%;
+	background-color : #ffffff;
+}
