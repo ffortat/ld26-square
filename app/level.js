@@ -80,8 +80,8 @@ Level.prototype.draw = function() {
 			if (layer.visible) {
 				layer.data.forEach(function (tile, index) {
 					if (tile > 0) {
-						var x = index % this.width * this.tile.width;
-						var y = Math.floor(index / this.width) * this.tile.height;
+						var x = index % this.width * this.tile.width - this.window.x;
+						var y = Math.floor(index / this.width) * this.tile.height - this.window.y;
 						context.drawImage(tileset.image, tileset.tiles[tile].x, tileset.tiles[tile].y, width, height, x, y, width, height);
 					}
 				}, this);
