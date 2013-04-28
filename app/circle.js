@@ -23,11 +23,31 @@ Circle.prototype.init = function(image) {
 	this.loaded = true;
 };
 
-Circle.prototype.collides = function(x, y) {
+Circle.prototype.collides = function(x, y, width, height) {
 	var cx = this.x + this.tilewidth / 2;
 	var cy = this.y + this.tileheight / 2;
+	var point = {
+		x : 0,
+		y : 0
+	}
 
-	return (Math.sqrt(Math.pow(cx - x, 2) + Math.pow(cy - y, 2)) <= this.tilewidth / 2);
+	if (cx < x) {
+		point.x = x;
+	} else if (cx > x + width) {
+		point.x = x + width;
+	} else {
+		point.x = cx;
+	}
+
+	if (cy < y) {
+		point.y = y;
+	} else if (cy > y + height) {
+		point.y = y + height;
+	} else {
+		point.y = cy;
+	}
+
+	return (Math.sqrt(Math.pow(cx - point.x, 2) + Math.pow(cy - point.y, 2)) <= this.tilewidth / 2);
 };
 
 Circle.prototype.kill = function() {
