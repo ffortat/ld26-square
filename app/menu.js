@@ -1,4 +1,6 @@
 function Menu() {
+	var self = this;
+
 	context.font = '100px Arial';
 	var playwidth = context.measureText('PLAY').width;
 
@@ -9,9 +11,19 @@ function Menu() {
 		bottom : 220 + 100,
 		over : false
 	}
+	this.instructions = new Image();
 
-	this.bind();
+	this.loaded = false;
+
+	load.image('images/instructions.png', function (image) {self.init(image);});
 }
+
+Menu.prototype.init = function(image) {
+	this.instructions = image;
+	this.bind();
+
+	this.loaded = true;
+};
 
 Menu.prototype.bind = function() {
 	var self = this;
@@ -47,10 +59,10 @@ Menu.prototype.draw = function() {
 
 	context.fillText('²', canvas.width / 2, 20);
 	context.strokeRect((canvas.width - 120) / 2, 20, 120, 120);
+	context.drawImage(this.instructions, 0, canvas.height - 150);
 
 	if (this.play.over) {
 		context.fillStyle = '#666666';
 	}
-
 	context.fillText('PLAY', canvas.width / 2, 220)
 };
