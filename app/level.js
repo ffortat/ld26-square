@@ -22,6 +22,7 @@ function Level(name) {
 	this.origin = {x:0,y:0};
 	this.square = {};
 	this.circles = [];
+	this.finishline = {};
 
 	this.loaded = false;
 	this.listeners = {
@@ -47,6 +48,12 @@ Level.prototype.init = function(level) {
 	this.json = level;
 
 	level.tilesets.forEach(function (tileset, index) {
+		if (tileset.name === 'Finish') {
+			for (var i = tileset.firstgid; i < tileset.firstgid + 4; i += 1) {
+				this.finishline[i] = true;
+			}
+		}
+
 		if (tileset.name === 'Placeholders') {
 			squareid = tileset.firstgid;
 			circleid = tileset.firstgid + 1;
@@ -169,8 +176,8 @@ Level.prototype.collides = function(x, y, check) {
 	var index = y * this.width + x;
 
 	this.layers.forEach(function (layer) {
-		collides = collides || (layer.visible && layer.data[index] !== 0);
-	});
+		collides = collides || (layer.visible && layer.data[index] !== 0 && !this.finishline[layer.data[index]]);
+	}, this);
 
 	if (collides) {
 		if (check.bottom) {

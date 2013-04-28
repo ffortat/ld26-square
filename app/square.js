@@ -141,7 +141,7 @@ Square.prototype.tick = function(length) {
 			this.switchtoanim(states.attacking);
 		} else if (keydown[keys.right]) {
 			var x = this.x - frame.points[0].x + this.tilesets[this.tiles[frame.tile].set].width;
-			var collision = this.level.collides(x, this.y, {right:true});
+			var collision = this.level.collides(x, this.y, {right:true, bottom:this.falling});
 
 			if (!collision.collides) {
 				if (this.state !== states.running) {
@@ -150,7 +150,7 @@ Square.prototype.tick = function(length) {
 			}
 		} else if (keydown[keys.left]) {
 			var x = this.x - frame.points[0].x;
-			var collision = this.level.collides(x, this.y, {left:true});
+			var collision = this.level.collides(x, this.y, {left:true, bottom:this.falling});
 
 			if (!collision.collides) {
 				if (this.state !== states.running) {
@@ -184,7 +184,7 @@ Square.prototype.tick = function(length) {
 	
 					if (!this.animationrunning) {
 						var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
-						var collision = this.level.collides(this.x, y, {bottom:true});
+						var collision = this.level.collides(this.x, y, {right:true,left:true,bottom:true});
 
 						if (collision.collides || this.falling) {
 							this.switchtoanim(states.standing);
