@@ -12,8 +12,10 @@ www/square.global.js : \
 	app/states.js \
 	app/square.js \
 	app/circle.js \
+	app/hud.js \
 	app/level.js \
 	app/game.js \
+	app/menu.js \
 	app/main.js
 	@rm -f $@
 	@echo "(function () {"  > $@

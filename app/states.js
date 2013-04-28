@@ -4,4 +4,4 @@ var states = {
 	jumping : 'jumping',
 	attacking : 'attacking',
 	falling : 'falling'
-}
+};
