@@ -182,6 +182,15 @@ Square.prototype.tick = function(length) {
 					frame = this.currentanimation.frames[this.currentframe];
 					var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
 					var collision = this.level.collides(this.x, y, {bottom:true});
+			
+					this.level.circles.forEach(function (circle) {
+						var x = this.x - frame.points[0].x;
+						var y = this.y + frame.points[0].y;
+
+						if (circle.collides(x, y, this.tilewidth, this.tileheight)) {
+							circle.kill();
+						}
+					}, this);
 
 					if (collision.collides) {
 						var previousy = this.y;

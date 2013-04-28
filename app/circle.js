@@ -8,7 +8,7 @@ function Circle(x, y, level) {
 
 	this.x = x * this.tilewidth;
 	this.y = y * this.tileheight;
-	this.speed = 64;
+	this.speed = 128;
 
 	this.forward = (Math.floor(Math.random()*2) === 0);
 
