@@ -87,6 +87,9 @@ Square.prototype.switchtoanim = function(state, mirror) {
 			this.jump.height = 0;
 			this.jump.length = 0;
 			canswitch = (this.state !== states.running);
+			if (canswitch) {
+				keydown[keys.x] = false;
+			}
 		}
 	} else if (state === states.falling) {
 		state = states.standing;
@@ -100,6 +103,9 @@ Square.prototype.switchtoanim = function(state, mirror) {
 	} else if (state === states.attacking) {
 		mirror = !this.forward;
 		canswitch = (this.state !== states.running && this.state !== states.attacking);
+		if (canswitch) {
+			keydown[keys.c] = false;
+		}
 	}
 
 	if (canswitch) {
@@ -129,7 +135,11 @@ Square.prototype.tick = function(length) {
 		var frame = this.currentanimation.frames[this.currentframe];
 		this.animationtimer += length;
 
-		if (keydown[keys.right]) {
+		if (keydown[keys.x]) {
+			this.switchtoanim(states.jumping);
+		} else if (keydown[keys.c]) {
+			this.switchtoanim(states.attacking);
+		} else if (keydown[keys.right]) {
 			var x = this.x - frame.points[0].x + this.tilesets[this.tiles[frame.tile].set].width;
 			var collision = this.level.collides(x, this.y, {right:true});
 
@@ -147,10 +157,6 @@ Square.prototype.tick = function(length) {
 					this.switchtoanim(states.running, true);
 				}
 			}
-		} else if (keydown[keys.x]) {
-			this.switchtoanim(states.jumping);
-		} else if (keydown[keys.c]) {
-			this.switchtoanim(states.attacking);
 		}
 
 		if (this.animationrunning) {

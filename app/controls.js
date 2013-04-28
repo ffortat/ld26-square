@@ -10,7 +10,9 @@ var keys = {
 var keydown = {};
 
 function onkeydown(event) {
-	keydown[event.keyCode] = true;
+	if (keydown[event.keyCode] === undefined) {
+		keydown[event.keyCode] = true;
+	}
 }
 
 function onkeyup (event) {
