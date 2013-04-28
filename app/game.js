@@ -6,6 +6,7 @@ function Game() {
 
 	this.win = false;
 	this.loose = false;
+	this.intro = false;
 
 	this.init('level1');
 }
@@ -33,6 +34,7 @@ Game.prototype.init = function(level) {
 		} else {
 			self.currentlevel += 1;
 			self.init('level' + self.currentlevel);
+			self.startlevel();
 		}
 	});
 };
@@ -42,9 +44,26 @@ Game.prototype.launch = function(level) {
 	this.hud = new Hud(this.level);
 };
 
+Game.prototype.startlevel = function() {
+	var self = this;
+	this.intro = true;
+	setTimeout(function () {
+		self.intro = false;
+	}, 1000);
+};
+
 Game.prototype.tick = function(length) {
-	this.level.tick(length);
-	this.hud.tick();
+	if (!this.intro) {
+		this.level.tick(length);
+		this.hud.tick();
+	}
+
+	if (this.win) {
+		if (keydown[keys.escape]) {
+			current = menu;
+			this.win = false;
+		}
+	}
 
 	this.draw();
 };
@@ -64,6 +83,13 @@ Game.prototype.draw = function() {
 		context.textBaseline = 'middle';
 
 		context.fillText('YOU LOOSE !', canvas.width / 2, canvas.height / 2);
+	} else if (this.intro) {
+		context.font = '100px Arial';
+		context.fillStyle = '#000000';
+		context.textAlign = 'center';
+		context.textBaseline = 'middle';
+
+		context.fillText('LEVEL ' + this.currentlevel, canvas.width / 2, canvas.height / 2);
 	} else {
 		this.level.draw();
 		this.hud.draw();

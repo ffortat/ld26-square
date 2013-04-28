@@ -32,6 +32,7 @@ Menu.prototype.bind = function() {
 		if (mouse.left && self.play.over) {
 			self.play.over = false;
 			current = game;
+			game.startlevel();
 		}
 	});
 };
