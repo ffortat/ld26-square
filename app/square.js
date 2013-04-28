@@ -86,12 +86,14 @@ Square.prototype.switchtoanim = function(state, mirror) {
 			this.jump.length = 0;
 			canswitch = (this.state !== states.running);
 		}
-	} else if (state === states.falling && !this.falling) {
+	} else if (state === states.falling) {
 		state = states.standing;
-		this.fall.height = this.y;
-		this.fall.length = 0;
-		this.fall.velocity = 0;
-		this.falling = true;
+		if (!this.falling) {
+			this.fall.height = this.y;
+			this.fall.length = 0;
+			this.fall.velocity = 0;
+			this.falling = true;
+		}
 		canswitch = true;
 	} else if (state === states.attacking) {
 		mirror = !this.forward;
