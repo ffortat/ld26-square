@@ -25,6 +25,20 @@ www/square.global.js : \
 www/square.js : www/square.global.js
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
+	mkdir www/animations
+	mkdir www/images
+	mkdir www/levels
+	cp app/animations/square.json www/animations/
+	cp app/levels/level1.json www/levels/
+	cp app/images/circle.png www/images/
+	cp app/images/finish.png www/images/
+	cp app/images/ground-tileset.png www/images/
+	cp app/images/instructions.png www/images/
+	cp app/images/square-attack.png www/images/
+	cp app/images/square-jump.png www/images/
+	cp app/images/square.png www/images/
+	cp app/images/truck.png www/images/
+	cp app/styles.css www/
 
 clean :
 	rm -f www/square.global.js

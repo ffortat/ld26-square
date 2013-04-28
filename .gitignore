@@ -1,3 +1,7 @@
 syntax : glob
 www/square.*
 *.capx.backup*
+www/animations/*
+www/levels/*
+www/images/*
+www/styles.css
