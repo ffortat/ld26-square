@@ -33,6 +33,7 @@ function Square(x, y, level) {
 	};
 	this.state = states.standing;
 
+	this.dead = false;
 	this.loaded = false;
 
 	load.json('animations/square.json', function (data) {self.init(data);});
@@ -111,8 +112,12 @@ Square.prototype.switchtoanim = function(state, mirror) {
 	}
 };
 
+Square.prototype.kill = function() {
+	this.dead = true;
+};
+
 Square.prototype.tick = function(length) {
-	if (this.loaded) {
+	if (this.loaded && !this.dead) {
 		var frame = this.currentanimation.frames[this.currentframe];
 		this.animationtimer += length;
 
@@ -222,12 +227,22 @@ Square.prototype.tick = function(length) {
 			}
 		}
 
+		this.level.circles.some(function (circle) {
+			frame = this.currentanimation.frames[this.currentframe];
+			var x = this.x - frame.points[0].x;
+			var y = this.y - frame.points[0].y;
+
+			if (circle.collides(x, y, this.tilewidth, this.tileheight)) {
+				this.kill();
+			}
+		}, this);
+
 		this.level.updatecamera(this.x, this.y);
 	}
 };
 
 Square.prototype.draw = function(gamewindow) {
-	if (this.loaded) {
+	if (this.loaded && !this.dead) {
 		var frame = this.currentanimation.frames[this.currentframe];
 		var tile = this.tiles[frame.tile];
 		var tileset = this.tilesets[tile.set];
