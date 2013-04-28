@@ -54,6 +54,9 @@ Circle.prototype.kill = function() {
 	this.level.circles.some(function (circle, index) {
 		if (circle === this) {
 			this.level.circles.splice(index, 1);
+			this.level.listeners.kill.forEach(function (listener) {
+				listener('circle');
+			});
 			return true;
 		}
 	}, this)

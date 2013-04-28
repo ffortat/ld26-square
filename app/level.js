@@ -19,10 +19,21 @@ function Level(name) {
 		height : 0
 	};
 
+	this.origin = {x:0,y:0};
 	this.square = {};
 	this.circles = [];
 
 	this.loaded = false;
+	this.listeners = {
+		ready : [],
+		kill : [],
+		loose : [],
+		win : []
+	};
+	this.next = {
+		ready : [],
+		kill : []
+	};
 
 	load.json('levels/' + name + '.json', function (data) {self.init(data);});
 }
@@ -78,7 +89,9 @@ Level.prototype.init = function(level) {
 				var y = Math.floor(index / layer.width);
 
 				if (tileid === squareid) {
-					this.square = new Square(x, y, this);
+					this.origin.x = x * level.tilewidth + level.tilewidth / 2;
+					this.origin.y = y * level.tileheight + level.tileheight / 2;
+					this.square = new Square(x, y, level.properties.squares, this);
 				} else if (tileid === circleid) {
 					this.circles.push(new Circle(x, y, this));
 				}
@@ -88,8 +101,55 @@ Level.prototype.init = function(level) {
 		}
 	}, this);
 
+	this.on('kill', function (type) {
+		if (type === 'square') {
+			if (self.square.lives > 0) {
+				setTimeout(function () {
+					self.square.x = self.origin.x;
+					self.square.y = self.origin.y;
+					self.updatecamera(self.origin.x, self.origin.y);
+					self.square.dead = false;
+				}, 2000);
+			} else {
+				self.loose();
+			}
+		}
+	});
+
 	load.ready(function () {
 		self.loaded = true;
+		self.listeners.ready.forEach(function (listener) {
+			listener();
+		});
+		while (self.next.ready.length > 0) {
+			(self.next.ready.shift())();
+		}
+	});
+};
+
+Level.prototype.on = function(event, callback) {
+	if (this.listeners[event]) {
+		this.listeners[event].push(callback);
+	}
+};
+
+Level.prototype.ready = function(callback) {
+	if (!this.loaded) {
+		this.next.ready.push(callback);
+	} else {
+		callback();
+	}
+};
+
+Level.prototype.loose = function() {
+	this.listeners.loose.forEach(function (listener) {
+		listener();
+	});
+};
+
+Level.prototype.win = function() {
+	this.listeners.win.forEach(function (listener) {
+		listener();
 	});
 };
 

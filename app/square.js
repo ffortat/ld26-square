@@ -1,4 +1,4 @@
-function Square(x, y, level) {
+function Square(x, y, lives, level) {
 	var self = this;
 
 	this.level = level;
@@ -33,6 +33,7 @@ function Square(x, y, level) {
 	};
 	this.state = states.standing;
 
+	this.lives = lives;
 	this.dead = false;
 	this.loaded = false;
 
@@ -114,6 +115,13 @@ Square.prototype.switchtoanim = function(state, mirror) {
 
 Square.prototype.kill = function() {
 	this.dead = true;
+	this.lives -= 1;
+	this.switchtoanim(states.standing);
+	this.animationrunning = false;
+	this.falling = false;
+	this.level.listeners.kill.forEach(function (listener) {
+		listener('square');
+	});
 };
 
 Square.prototype.tick = function(length) {
