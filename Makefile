@@ -11,6 +11,7 @@ www/square.global.js : \
 	app/canvas.js \
 	app/states.js \
 	app/square.js \
+	app/controls.js \
 	app/circle.js \
 	app/hud.js \
 	app/level.js \
