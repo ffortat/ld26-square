@@ -37,8 +37,11 @@ Hud.prototype.draw = function() {
 		var y = this.level.square.y - this.level.window.y - 2;
 
 		context.fillStyle = '#666666';
+		context.strokeStyle = '#666666';
+		context.lineWidth = 1;
 		context.font = '10px Arial';
 		context.textAlign = 'right';
+		context.textBaseline = 'alphabetic';
 
 		context.fillText(this.level.square.lives, x - 2, y - 2)
 		context.strokeRect(x, y - 10, 8, 8);
