@@ -71,7 +71,7 @@ Square.prototype.init = function(data) {
 	});
 };
 
-Square.prototype.switchtoanim = function(state) {
+Square.prototype.switchtoanim = function(state, mirror) {
 	var canswitch = false;
 
 	if (state === states.running) {
@@ -100,6 +100,7 @@ Square.prototype.switchtoanim = function(state) {
 		this.animationtimer = 0;
 		this.framelength = 1000 / this.currentanimation.speed;
 		this.animationrunning = true;
+		this.mirror = !(!mirror);
 	}
 };
 
@@ -123,8 +124,7 @@ Square.prototype.tick = function(length) {
 
 			if (!collision.collides) {
 				if (this.state !== states.running) {
-					this.mirror = true;
-					this.switchtoanim(states.running);
+					this.switchtoanim(states.running, true);
 				}
 			}
 		} else if (keydown[keys.x]) {
