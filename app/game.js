@@ -1,5 +1,6 @@
 function Game() {
-	this.level = new Level('prototype');
+	// this.level = new Level('prototype');
+	this.level = new Level('level1');
 }
 
 Game.prototype.tick = function(length) {
