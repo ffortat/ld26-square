@@ -19,6 +19,11 @@ function Square(x, y, level) {
 	this.tilesets = [];
 	this.tiles = {};
 
+	this.fall = {
+		height : 0,
+		length : 0,
+		gravity : 256
+	};
 	this.state = states.standing;
 
 	this.loaded = false;
@@ -71,6 +76,8 @@ Square.prototype.switchtoanim = function(state) {
 		canswitch = true;
 	} else if (state === states.falling) {
 		state = states.standing;
+		this.fall.height = this.y;
+		this.fall.length = 0;
 		canswitch = true;
 	}
 
@@ -89,10 +96,22 @@ Square.prototype.tick = function(length) {
 		this.animationtimer += length;
 
 		if (keydown[keys.right]) {
-			this.switchtoanim(states.running);
+			var frame = this.currentanimation.frames[this.currentframe];
+			var x = this.x - frame.points[0].x + this.tilesets[this.tiles[frame.tile].set].width;
+			var collision = this.level.collides(x, this.y, {right:true});
+
+			if (!collision.collides) {
+				this.switchtoanim(states.running);
+			}
 		} else if (keydown[keys.left]) {
-			this.mirror = true;
-			this.switchtoanim(states.running);
+			var frame = this.currentanimation.frames[this.currentframe];
+			var x = this.x - frame.points[0].x;
+			var collision = this.level.collides(x, this.y, {left:true});
+
+			if (!collision.collides) {
+				this.mirror = true;
+				this.switchtoanim(states.running);
+			}
 		} else if (keydown[keys.x]) {
 			this.switchtoanim(states.jumping);
 		} else if (keydown[keys.c]) {
@@ -125,17 +144,35 @@ Square.prototype.tick = function(length) {
 						this.switchtoanim(states.standing);
 					}
 				} else if (this.state === states.jumping) {
-					this.y -= this.tileheight / this.currentanimation.frames.length;
+					var frame = this.currentanimation.frames[this.currentframe];
+					var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
+					var collision = this.level.collides(this.x, y, {bottom:true});
+
+					if (collision.collides) {
+						this.y = collision.height - this.tilesets[this.tiles[frame.tile].set].height + frame.points[0].y;
+					}
 
 					if (!this.animationrunning) {
 						this.switchtoanim(states.falling);
+						this.state = states.falling;
 					}
-				} else if (this.state === states.falling) {
-					this.y -= 
 				}
 			}
 		}
 
+		if (this.state === states.falling) {
+			this.fall.length += length;
+			this.y = this.fall.height + this.fall.gravity * Math.pow(this.fall.length / 1000, 2) / 2;
+
+			var frame = this.currentanimation.frames[this.currentframe];
+			var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
+			var collision = this.level.collides(this.x, y, {bottom:true});
+
+			if (collision.collides) {
+				this.y = collision.height - this.tilesets[this.tiles[frame.tile].set].height + frame.points[0].y;
+				this.switchtoanim(states.standing);
+			}
+		}
 
 		this.level.updatecamera(this.x, this.y);
 	}

@@ -98,6 +98,33 @@ Level.prototype.updatecamera = function(x, y) {
 	this.window.y = Math.min(Math.max(0, y - canvas.height / 2), this.height * this.tile.height - canvas.height);
 };
 
+Level.prototype.collides = function(x, y, check) {
+	var collides = false;
+	var height = 0;
+	var width = 0;
+
+	x = Math.floor(x / this.tile.width);
+	y = Math.floor(y / this.tile.height);
+
+	var index = y * this.width + x;
+
+	this.layers.forEach(function (layer) {
+		collides = collides || (layer.visible && layer.data[index] !== 0);
+	});
+
+	if (collides) {
+		if (check.bottom) {
+			height = y * this.tile.height;
+		}
+	}
+
+	return {
+		collides : collides,
+		height : height,
+		width : width
+	}
+};
+
 Level.prototype.tick = function(length) {
 	if (this.loaded) {
 		this.square.tick(length);
