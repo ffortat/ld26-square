@@ -3,6 +3,7 @@ var keys = {
 	up : 38,
 	right : 39,
 	down : 40,
+	c : 67,
 	x : 88
 }
 

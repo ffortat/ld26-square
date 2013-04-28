@@ -13,6 +13,7 @@ function Square(x, y, level) {
 	this.currentanimation = '';
 	this.currentframe = 0;
 	this.mirror = false;
+	this.forward = true;
 	this.animationrunning = false;
 	this.animationtimer = 0;
 	this.framelength = 0;
@@ -75,6 +76,7 @@ Square.prototype.switchtoanim = function(state, mirror) {
 	var canswitch = false;
 
 	if (state === states.running) {
+		this.forward = !mirror;
 		canswitch = (this.state === states.standing);
 	} else if (state === states.standing) {
 		canswitch = true;
@@ -91,6 +93,9 @@ Square.prototype.switchtoanim = function(state, mirror) {
 		this.fall.velocity = 0;
 		this.falling = true;
 		canswitch = true;
+	} else if (state === states.attacking) {
+		mirror = !this.forward;
+		canswitch = (this.state !== states.running && this.state !== states.attacking);
 	}
 
 	if (canswitch) {
@@ -160,8 +165,6 @@ Square.prototype.tick = function(length) {
 						var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
 						var collision = this.level.collides(this.x, y, {bottom:true});
 
-						this.mirror = false;
-
 						if (collision.collides || this.falling) {
 							this.switchtoanim(states.standing);
 						} else {
@@ -185,6 +188,10 @@ Square.prototype.tick = function(length) {
 						if (this.jump.length > 0) {
 							this.fall.velocity = this.jump.height / (this.jump.length / 1000);
 						}
+					}
+				} else if (this.state === states.attacking) {
+					if (!this.animationrunning) {
+						this.switchtoanim(states.standing);
 					}
 				}
 			}
