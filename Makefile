@@ -46,3 +46,7 @@ clean :
 
 delete :
 	rm -f www/square.js www/square.global.js
+	rm -rf www/animations
+	rm -rf www/images
+	rm -rf www/levels
+	rm -f www/styles.css
