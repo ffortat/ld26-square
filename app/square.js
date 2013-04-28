@@ -19,11 +19,16 @@ function Square(x, y, level) {
 	this.tilesets = [];
 	this.tiles = {};
 
+	this.jump = {
+		height : 0,
+		length : 0
+	}
 	this.falling = false;
 	this.fall = {
 		height : 0,
 		length : 0,
-		gravity : 1000
+		gravity : 1500,
+		velocity : 0
 	};
 	this.state = states.standing;
 
@@ -74,11 +79,16 @@ Square.prototype.switchtoanim = function(state) {
 	} else if (state === states.standing) {
 		canswitch = true;
 	} else if (state === states.jumping) {
-		canswitch = (this.state !== states.running);
+		if (this.state !== states.jumping) {
+			this.jump.height = 0;
+			this.jump.length = 0;
+			canswitch = (this.state !== states.running);
+		}
 	} else if (state === states.falling && !this.falling) {
 		state = states.standing;
 		this.fall.height = this.y;
 		this.fall.length = 0;
+		this.fall.velocity = 0;
 		this.falling = true;
 		canswitch = true;
 	}
@@ -164,12 +174,17 @@ Square.prototype.tick = function(length) {
 					var collision = this.level.collides(this.x, y, {bottom:true});
 
 					if (collision.collides) {
+						var previousy = this.y;
 						this.y = collision.height - this.tilesets[this.tiles[frame.tile].set].height + frame.points[0].y;
+						this.jump.height += (this.y - previousy);
+						this.jump.length += (1000 / this.currentanimation.speed);
 					}
 
 					if (!this.animationrunning) {
-						console.log('i should fall')
 						this.switchtoanim(states.falling);
+						if (this.jump.length > 0) {
+							this.fall.velocity = this.jump.height / (this.jump.length / 1000);
+						}
 					}
 				}
 			}
@@ -177,7 +192,7 @@ Square.prototype.tick = function(length) {
 
 		if (this.falling) {
 			this.fall.length += length;
-			this.y = this.fall.height + this.fall.gravity * Math.pow(this.fall.length / 1000, 2) / 2;
+			this.y = this.fall.height + this.fall.velocity * this.fall.length / 1000 + this.fall.gravity * Math.pow(this.fall.length / 1000, 2) / 2;
 
 			frame = this.currentanimation.frames[this.currentframe];
 			var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;

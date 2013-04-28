@@ -3,15 +3,7 @@
 	"animations" : {
 		"standing" : {
 			"frames" : [
-				{
-					"tile" : 0,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				}
+				{"tile" : 0, "points" : [{"x" : 24,"y" : 32}]}
 			],
 			"speed" : 5,
 			"loop" : false,
@@ -19,60 +11,12 @@
 		},
 		"running" : {
 			"frames" : [
-				{
-					"tile" : 0,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				},
-				{
-					"tile" : 1,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				},
-				{
-					"tile" : 2,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				},
-				{
-					"tile" : 3,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				},
-				{
-					"tile" : 4,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				},
-				{
-					"tile" : 5,
-					"points" : [
-						{
-							"x" : 24,
-							"y" : 32
-						}
-					]
-				}
+				{"tile" : 0, "points" : [{"x" : 24,"y" : 32}]},
+				{"tile" : 1, "points" : [{"x" : 24,"y" : 32}]},
+				{"tile" : 2, "points" : [{"x" : 24,"y" : 32}]},
+				{"tile" : 3, "points" : [{"x" : 24,"y" : 32}]},
+				{"tile" : 4, "points" : [{"x" : 24,"y" : 32}]},
+				{"tile" : 5, "points" : [{"x" : 24,"y" : 32}]}
 			],
 			"speed" : 60,
 			"loop" : false,
@@ -80,60 +24,12 @@
 		},
 		"attacking" : {
 			"frames" : [
-				{
-					"tile" : 6,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 7,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 8,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 9,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 10,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 11,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				}
+				{"tile" : 6, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 7, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 8, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 9, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 10, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 11, "points" : [{"x" : 16,"y" : 16}]}
 			],
 			"speed" : 60,
 			"loop" : false,
@@ -141,60 +37,12 @@
 		},
 		"jumping" : {
 			"frames" : [
-				{
-					"tile" : 12,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 48
-						}
-					]
-				},
-				{
-					"tile" : 13,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 36
-						}
-					]
-				},
-				{
-					"tile" : 14,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 24
-						}
-					]
-				},
-				{
-					"tile" : 15,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 16,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				},
-				{
-					"tile" : 17,
-					"points" : [
-						{
-							"x" : 16,
-							"y" : 16
-						}
-					]
-				}
+				{"tile" : 12, "points" : [{"x" : 16,"y" : 48}]},
+				{"tile" : 13, "points" : [{"x" : 16,"y" : 36}]},
+				{"tile" : 14, "points" : [{"x" : 16,"y" : 24}]},
+				{"tile" : 15, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 16, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 17, "points" : [{"x" : 16,"y" : 16}]}
 			],
 			"speed" : 60,
 			"loop" : false,
