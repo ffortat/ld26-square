@@ -12,7 +12,7 @@ var requestAnimFrame = (function() {
 var time = new Date().getTime();
 var menu = new Menu()
 var game = new Game();
-var current = game;
+var current = menu;
 
 function tick() {
 	requestAnimFrame(tick);

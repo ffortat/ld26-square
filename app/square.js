@@ -131,7 +131,7 @@ Square.prototype.kill = function() {
 };
 
 Square.prototype.tick = function(length) {
-	if (this.loaded && !this.dead) {
+	if (this.loaded && !this.dead && !this.level.ending && !this.level.over) {
 		var frame = this.currentanimation.frames[this.currentframe];
 		this.animationtimer += length;
 
@@ -260,6 +260,66 @@ Square.prototype.tick = function(length) {
 			}
 		}, this);
 
+		this.level.checkfinish(this.x, this.y);
+		this.level.updatecamera(this.x, this.y);
+	}
+
+	if (this.level.ending || (this.level.ending && this.level.over)) {
+		var frame = this.currentanimation.frames[this.currentframe];
+		this.animationtimer += length;
+
+		if (this.animationrunning) {
+			if (this.animationtimer >= this.framelength) {
+				this.animationtimer = 0;
+				this.currentframe += 1;
+				frame = this.currentanimation.frames[this.currentframe];
+
+				if (this.currentframe >= this.currentanimation.frames.length) {
+					this.currentframe = 0;
+					frame = this.currentanimation.frames[this.currentframe];
+
+					if (this.level.over) {
+						this.animationrunning = false;
+						this.level.ending = false;
+					}
+				}
+
+				if (this.state === states.running) {
+					if (this.mirror) {
+						this.x -= this.tilewidth / this.currentanimation.frames.length;
+					} else {
+						this.x += this.tilewidth / this.currentanimation.frames.length;
+					}
+	
+					if (!this.animationrunning) {
+						var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
+						var collision = this.level.collides(this.x, y, {right:true,left:true,bottom:true});
+
+						if (collision.collides || this.falling) {
+							this.switchtoanim(states.standing);
+						} else {
+							this.switchtoanim(states.falling);
+						}
+					}
+				}
+			}
+		}
+
+		if (this.falling) {
+			this.fall.length += length;
+			this.y = this.fall.height + this.fall.velocity * this.fall.length / 1000 + this.fall.gravity * Math.pow(this.fall.length / 1000, 2) / 2;
+
+			frame = this.currentanimation.frames[this.currentframe];
+			var y = this.y - frame.points[0].y + this.tilesets[this.tiles[frame.tile].set].height;
+			var collision = this.level.collides(this.x, y, {bottom:true});
+
+			if (collision.collides) {
+				this.y = collision.height - this.tilesets[this.tiles[frame.tile].set].height + frame.points[0].y;
+				this.falling = false;
+			}
+		}
+
+		this.level.checkend(this.x, this.y);
 		this.level.updatecamera(this.x, this.y);
 	}
 };

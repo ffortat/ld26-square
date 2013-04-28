@@ -23,6 +23,8 @@ function Level(name) {
 	this.square = {};
 	this.circles = [];
 	this.finishline = {};
+	this.finish = {};
+	this.end = -1;
 
 	this.loaded = false;
 	this.listeners = {
@@ -36,14 +38,19 @@ function Level(name) {
 		kill : []
 	};
 
+	this.ending = false;
+	this.over = false;
+
 	load.json('levels/' + name + '.json', function (data) {self.init(data);});
 }
 
 Level.prototype.init = function(level) {
 	var self = this;
 
-	var squareid = 0;
-	var circleid = 0;
+	var squareid = -1;
+	var circleid = -1;
+	var finishid = -1;
+	var endid = -1;
 
 	this.json = level;
 
@@ -57,6 +64,8 @@ Level.prototype.init = function(level) {
 		if (tileset.name === 'Placeholders') {
 			squareid = tileset.firstgid;
 			circleid = tileset.firstgid + 1;
+			finishid = tileset.firstgid + 2;
+			endid = tileset.firstgid + 3;
 		} else {
 			var filename = tileset.image;
 			var uri = 'images' + filename.substr(filename.lastIndexOf('/'));
@@ -101,6 +110,10 @@ Level.prototype.init = function(level) {
 					this.square = new Square(x, y, level.properties.squares, this);
 				} else if (tileid === circleid) {
 					this.circles.push(new Circle(x, y, this));
+				} else if (tileid === finishid) {
+					this.finish[index] = true;
+				} else if (tileid === endid) {
+					this.end = index;
 				}
 			}, this);
 
@@ -189,6 +202,34 @@ Level.prototype.collides = function(x, y, check) {
 		collides : collides,
 		height : height,
 		width : width
+	}
+};
+
+Level.prototype.checkfinish = function(x, y) {
+	x = Math.floor(x / this.tile.width);
+	y = Math.floor(y / this.tile.height);
+
+	var index = y * this.width + x;
+
+	if (this.finish[index]) {
+		this.ending = true;
+	}
+};
+
+Level.prototype.checkend = function(x, y) {
+	var self = this;
+
+	x = Math.floor(x / this.tile.width);
+	y = Math.floor(y / this.tile.height);
+
+	var index = y * this.width + x;
+
+	if (this.end === index) {
+		this.over = true;
+
+		setTimeout(function () {
+			self.win();
+		}, 2000);
 	}
 };
 
