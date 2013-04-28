@@ -192,6 +192,15 @@ Square.prototype.tick = function(length) {
 						}
 					}
 				} else if (this.state === states.attacking) {
+					this.level.circles.forEach(function (circle) {
+						frame = this.currentanimation.frames[this.currentframe];
+						var x = this.x + (this.forward ? (this.tilesets[this.tiles[frame.tile].set].width - frame.points[0].x) : -frame.points[0].x)
+
+						if (circle.collides(x, this.y)) {
+							circle.kill();
+						}
+					}, this);
+
 					if (!this.animationrunning) {
 						this.switchtoanim(states.standing);
 					}

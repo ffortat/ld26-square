@@ -127,6 +127,9 @@ Level.prototype.collides = function(x, y, check) {
 
 Level.prototype.tick = function(length) {
 	if (this.loaded) {
+		this.circles.forEach(function (circle) {
+			circle.tick(length);
+		}, this)
 		this.square.tick(length);
 	}
 };
@@ -149,6 +152,9 @@ Level.prototype.draw = function() {
 			}
 		}, this);
 
+		this.circles.forEach(function (circle) {
+			circle.draw(this.window);
+		}, this)
 		this.square.draw(this.window);
 	}
 };
