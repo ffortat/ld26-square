@@ -178,30 +178,65 @@ Level.prototype.updatecamera = function(x, y) {
 	this.window.y = Math.min(Math.max(0, y - canvas.height / 2), this.height * this.tile.height - canvas.height);
 };
 
-Level.prototype.collides = function(x, y, check) {
+Level.prototype.collides = function(x, y, width, height, check) {
+	if (!width) width = this.tile.width;
+	if (!height) height = this.tile.height;
+	var self = this;
 	var collides = false;
-	var height = 0;
-	var width = 0;
+	var ty = 0;
+	var tx = 0;
+	x = Math.round(x);
+	y = Math.round(y);
 
-	x = Math.floor(x / this.tile.width);
-	y = Math.floor(y / this.tile.height);
+	var cx = Math.floor(x / this.tile.width);
+	var cy = Math.floor(y / this.tile.height);
 
-	var index = y * this.width + x;
+	var index = cy * this.width + cx;
+
+	function checkcollisions(id, layer) {
+		return collides || (layer.visible && layer.data[id] !== 0 && !self.finishline[layer.data[id]]);
+	}
 
 	this.layers.forEach(function (layer) {
-		collides = collides || (layer.visible && layer.data[index] !== 0 && !this.finishline[layer.data[index]]);
-	}, this);
+		if (check === undefined) {
+			collides = checkcollisions(index, layer);
+		} else {
+			if (check.left) {
+				collides = checkcollisions(index - 1, layer);
 
-	if (collides) {
-		if (check.bottom) {
-			height = y * this.tile.height;
+				if (check.bottom) {
+					collides = checkcollisions(index + this.width - 1, layer);
+				}
+			} else if (check.right) {
+				collides = checkcollisions(index + 1, layer);
+
+				if (check.bottom) {
+					collides = checkcollisions(index + this.width + 1, layer);
+				}
+			} else {
+				if (check.bottom) {
+					var alty = Math.floor((y + height) / this.tile.height);
+					index = alty * this.width + cx;
+					collides = checkcollisions(index, layer);
+					if (collides) {
+						ty = alty * this.tile.height - height;
+					}
+				}
+				if (check.top && !collides) {
+					index = cy * this.width + cx;
+					collides = checkcollisions(index - this.width, layer);
+					if (collides) {
+						ty = cy * this.tile.height;
+					}
+				}
+			}
 		}
-	}
+	}, this);
 
 	return {
 		collides : collides,
-		height : height,
-		width : width
+		y : ty,
+		x : tx
 	}
 };
 

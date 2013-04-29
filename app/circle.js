@@ -70,8 +70,8 @@ Circle.prototype.tick = function(length) {
 
 		if (this.forward) {
 			x += this.speed * length / 1000;
-			collisiondown = this.level.collides(x + this.tilewidth, this.y + this.tileheight, {bottom : true});
-			collisionside = this.level.collides(x + this.tilewidth, this.y, {right : true});
+			collisiondown = this.level.collides(x, this.y, this.tilewidth, this.tileheight, {bottom : true, right : true});
+			collisionside = this.level.collides(x, this.y, this.tilewidth, this.tileheight);
 			
 			if (!collisiondown.collides || collisionside.collides) {
 				x = Math.floor(x / this.tilewidth) * this.tilewidth;
@@ -79,8 +79,8 @@ Circle.prototype.tick = function(length) {
 			}
 		} else {
 			x -= this.speed * length / 1000;
-			collisiondown = this.level.collides(x, this.y + this.tileheight, {bottom : true});
-			collisionside = this.level.collides(x, this.y, {left : true});
+			collisiondown = this.level.collides(x, this.y, this.tilewidth, this.tileheight, {bottom : true, left : true});
+			collisionside = this.level.collides(x, this.y, this.tilewidth, this.tileheight);
 			
 			if (!collisiondown.collides || collisionside.collides) {
 				x = Math.ceil(x / this.tilewidth) * this.tilewidth;
