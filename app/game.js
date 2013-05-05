@@ -82,7 +82,7 @@ Game.prototype.draw = function() {
 		context.textAlign = 'center';
 		context.textBaseline = 'middle';
 
-		context.fillText('YOU LOOSE !', canvas.width / 2, canvas.height / 2);
+		context.fillText('YOU LOSE !', canvas.width / 2, canvas.height / 2);
 	} else if (this.intro) {
 		context.font = '100px Arial';
 		context.fillStyle = '#000000';
