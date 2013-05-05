@@ -129,7 +129,7 @@ Level.prototype.init = function(level) {
 					self.square.y = self.origin.y;
 					self.updatecamera(self.origin.x, self.origin.y);
 					self.square.dead = false;
-				}, 2000);
+				}, 1000);
 			} else {
 				self.loose();
 			}
@@ -274,6 +274,11 @@ Level.prototype.tick = function(length) {
 			circle.tick(length);
 		}, this)
 		this.square.tick(length);
+
+		if (keydown[keys.r]) {
+			this.square.kill()
+			this.square.lives += 1;
+		}
 	}
 };
 

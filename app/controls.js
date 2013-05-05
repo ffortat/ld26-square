@@ -5,6 +5,7 @@ var keys = {
 	right : 39,
 	down : 40,
 	c : 67,
+	r : 82,
 	x : 88
 }
 
