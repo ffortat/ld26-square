@@ -178,65 +178,53 @@ Level.prototype.updatecamera = function(x, y) {
 	this.window.y = Math.min(Math.max(0, y - canvas.height / 2), this.height * this.tile.height - canvas.height);
 };
 
-Level.prototype.collides = function(x, y, width, height, check) {
+Level.prototype.collides = function(x, y, width, height) {
+	var self = this;
 	if (!width) width = this.tile.width;
 	if (!height) height = this.tile.height;
-	var self = this;
+
+	width -= 1;
+	height -= 1;
+
 	var collides = false;
-	var ty = 0;
-	var tx = 0;
-	x = Math.round(x);
-	y = Math.round(y);
+	var rows = 0;
+	var cols = 0;
+	var tiles = [];
+	var tx = x + width;
+	var ty = y + height;
+	var index = 0;
 
-	var cx = Math.floor(x / this.tile.width);
-	var cy = Math.floor(y / this.tile.height);
+	x = Math.floor(Math.round(x) / this.tile.width);
+	y = Math.floor(Math.round(y) / this.tile.height);
+	tx = Math.floor(Math.round(tx) / this.tile.width);
+	ty = Math.floor(Math.round(ty) / this.tile.height);
 
-	var index = cy * this.width + cx;
+	rows = ty - y + 1;
+	cols = tx - x + 1;
 
 	function checkcollisions(id, layer) {
-		return collides || (layer.visible && layer.data[id] !== 0 && !self.finishline[layer.data[id]]);
+		return (layer.visible && layer.data[id] !== 0 && !self.finishline[layer.data[id]]);
 	}
 
-	this.layers.forEach(function (layer) {
-		if (check === undefined) {
-			collides = checkcollisions(index, layer);
-		} else {
-			if (check.left) {
-				collides = checkcollisions(index - 1, layer);
+	for (var i = 0; i < rows; i +=1) {
+		tiles[i] = [];
+		for (var j = 0; j < cols; j += 1) {
+			index = (y + i) * this.width + (x + j)
+			tiles[i][j] = false;
 
-				if (check.bottom) {
-					collides = checkcollisions(index + this.width - 1, layer);
-				}
-			} else if (check.right) {
-				collides = checkcollisions(index + 1, layer);
+			this.layers.forEach(function (layer) {
+				tiles[i][j] = tiles[i][j] || checkcollisions(index, layer)
+			});
 
-				if (check.bottom) {
-					collides = checkcollisions(index + this.width + 1, layer);
-				}
-			} else {
-				if (check.bottom) {
-					var alty = Math.floor((y + height) / this.tile.height);
-					index = alty * this.width + cx;
-					collides = checkcollisions(index, layer);
-					if (collides) {
-						ty = alty * this.tile.height - height;
-					}
-				}
-				if (check.top && !collides) {
-					index = cy * this.width + cx;
-					collides = checkcollisions(index - this.width, layer);
-					if (collides) {
-						ty = cy * this.tile.height;
-					}
-				}
-			}
+			collides = collides || tiles[i][j];
 		}
-	}, this);
+	}
 
 	return {
 		collides : collides,
-		y : ty,
-		x : tx
+		// rows : rows,
+		// cols : cols,
+		tiles : tiles
 	}
 };
 

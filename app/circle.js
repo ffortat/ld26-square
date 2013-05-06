@@ -65,24 +65,24 @@ Circle.prototype.kill = function() {
 Circle.prototype.tick = function(length) {
 	if (this.loaded) {
 		var x = this.x;
-		var collisiondown;
-		var collisionside;
+		var y = this.y + this.tileheight / 2;
+		var collision;
 
 		if (this.forward) {
 			x += this.speed * length / 1000;
-			collisiondown = this.level.collides(x, this.y, this.tilewidth, this.tileheight, {bottom : true, right : true});
-			collisionside = this.level.collides(x, this.y, this.tilewidth, this.tileheight);
+			collision = this.level.collides(x, y, this.tilewidth, this.tileheight);
 			
-			if (!collisiondown.collides || collisionside.collides) {
+			if (collision.tiles[0][1] || 
+					(collision.tiles[1] !== undefined && collision.tiles[1][1] === false)) {
 				x = Math.floor(x / this.tilewidth) * this.tilewidth;
 				this.forward = false;
 			}
 		} else {
 			x -= this.speed * length / 1000;
-			collisiondown = this.level.collides(x, this.y, this.tilewidth, this.tileheight, {bottom : true, left : true});
-			collisionside = this.level.collides(x, this.y, this.tilewidth, this.tileheight);
+			collision = this.level.collides(x, y, this.tilewidth, this.tileheight);
 			
-			if (!collisiondown.collides || collisionside.collides) {
+			if (collision.tiles[0][0] || 
+					(collision.tiles[1] !== undefined && collision.tiles[1][0] === false)) {
 				x = Math.ceil(x / this.tilewidth) * this.tilewidth;
 				this.forward = true;
 			}
