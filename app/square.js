@@ -161,7 +161,6 @@ Square.prototype.tick = function(length) {
 		} else if (keydown[keys.right]) {
 			dx = this.tilewidth / this.animations['running'].frames.length;
 			collision = this.level.collides(x + dx, y, this.tilewidth, this.tileheight);
-			console.log(collision)
 
 			if (!collision.collides) {
 				if (this.state !== states.running) {
@@ -171,7 +170,6 @@ Square.prototype.tick = function(length) {
 		} else if (keydown[keys.left]) {
 			dx = - this.tilewidth / this.animations['running'].frames.length;
 			collision = this.level.collides(x + dx, y, this.tilewidth, this.tileheight);
-			console.log(collision)
 
 			if (!collision.collides) {
 				if (this.state !== states.running) {

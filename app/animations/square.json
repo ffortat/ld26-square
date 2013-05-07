@@ -24,12 +24,12 @@
 		},
 		"attacking" : {
 			"frames" : [
-				{"tile" : 6, "points" : [{"x" : 16,"y" : 16}]},
-				{"tile" : 7, "points" : [{"x" : 16,"y" : 16}]},
-				{"tile" : 8, "points" : [{"x" : 16,"y" : 16}]},
+				{"tile" : 6, "points" : [{"x" : 48,"y" : 16}]},
+				{"tile" : 7, "points" : [{"x" : 38,"y" : 16}]},
+				{"tile" : 8, "points" : [{"x" : 26,"y" : 16}]},
 				{"tile" : 9, "points" : [{"x" : 16,"y" : 16}]},
-				{"tile" : 10, "points" : [{"x" : 16,"y" : 16}]},
-				{"tile" : 11, "points" : [{"x" : 16,"y" : 16}]}
+				{"tile" : 10, "points" : [{"x" : 26,"y" : 16}]},
+				{"tile" : 11, "points" : [{"x" : 38,"y" : 16}]}
 			],
 			"speed" : 60,
 			"loop" : false,
@@ -41,8 +41,8 @@
 				{"tile" : 13, "points" : [{"x" : 16,"y" : 36}]},
 				{"tile" : 14, "points" : [{"x" : 16,"y" : 24}]},
 				{"tile" : 15, "points" : [{"x" : 16,"y" : 16}]},
-				{"tile" : 16, "points" : [{"x" : 16,"y" : 16}]},
-				{"tile" : 17, "points" : [{"x" : 16,"y" : 16}]}
+				{"tile" : 16, "points" : [{"x" : 16,"y" : 33}]},
+				{"tile" : 17, "points" : [{"x" : 16,"y" : 48}]}
 			],
 			"speed" : 60,
 			"loop" : false,
