@@ -21,8 +21,8 @@ function Square(x, y, lives, level) {
 	this.tiles = {};
 
 	this.jump = {
-		height : 0,
-		length : 0
+		height : -1.8 * this.tileheight,
+		length : 166
 	}
 	this.falling = false;
 	this.fall = {
@@ -86,8 +86,6 @@ Square.prototype.switchtoanim = function(state, mirror) {
 		canswitch = true;
 	} else if (state === states.jumping) {
 		if (this.state !== states.jumping) {
-			this.jump.height = 0;
-			this.jump.length = 0;
 			canswitch = (this.state !== states.running);
 			if (canswitch) {
 				keydown[keys.x] = false;
@@ -249,12 +247,8 @@ Square.prototype.tick = function(length) {
 						}
 
 						y = this.y - this.tileheight / 2;
-						this.jump.height += (this.y - previousy);
-						this.jump.length += (1000 / this.currentanimation.speed);
 					}
 
-// passer en falling à partir du moment où le côté du carré se rétracte
-// revoir la spritesheet
 					if (!this.animationrunning) {
 						this.switchtoanim(states.falling);
 						if (this.jump.length > 0) {
@@ -285,13 +279,6 @@ Square.prototype.tick = function(length) {
 
 			this.fall.length += length;
 			this.y = this.fall.height + this.fall.velocity * this.fall.length / 1000 + this.fall.gravity * Math.pow(this.fall.length / 1000, 2) / 2;
-			// if (Math.abs(this.y - previousy) > this.tileheight) {
-			// 	if (this.y > previousy) {
-			// 		this.y = previousy + this.tileheight;
-			// 	} else {
-			// 		this.y = previousy - this.tileheight;
-			// 	}
-			// }
 			y = this.y - this.tileheight / 2;
 
 			collision = this.level.collides(x, y, this.tilewidth, this.tileheight);
