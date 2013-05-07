@@ -240,8 +240,14 @@ Square.prototype.tick = function(length) {
 							}, this);
 						}, this);
 
-						var realy = (Math.floor(Math.round(y) / this.tileheight) + row) * this.tileheight;
-						this.y = realy - tile.height + frame.points[0].y;
+						if (row === 0) {
+							var realy = (Math.floor(Math.round(y) / this.tileheight) + 1) * this.tileheight;
+							this.y = realy + this.tileheight / 2;
+						} else {
+							var realy = (Math.floor(Math.round(y) / this.tileheight) + row) * this.tileheight;
+							this.y = realy - tile.height + frame.points[0].y;
+						}
+
 						y = this.y - this.tileheight / 2;
 						this.jump.height += (this.y - previousy);
 						this.jump.length += (1000 / this.currentanimation.speed);
@@ -299,10 +305,17 @@ Square.prototype.tick = function(length) {
 					}, this);
 				}, this);
 
-				var realy = (Math.floor(Math.round(y) / this.tileheight) + row) * this.tileheight;
-				this.y = realy - tile.height + frame.points[0].y;
+				if (row === 0) {
+					var realy = (Math.floor(Math.round(y) / this.tileheight) + 1) * this.tileheight;
+					this.y = realy + this.tileheight / 2;
+					this.resetfall();
+				} else {
+					var realy = (Math.floor(Math.round(y) / this.tileheight) + row) * this.tileheight;
+					this.y = realy - tile.height + frame.points[0].y;
+					this.falling = false;
+				}
+
 				y = this.y - this.tileheight / 2;
-				this.falling = false;
 			}
 		}
 
