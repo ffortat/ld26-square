@@ -264,7 +264,7 @@ Level.prototype.tick = function(length) {
 		this.square.tick(length);
 
 		if (keydown[keys.r]) {
-			this.square.lives += 1;
+			this.square.lives = parseInt(this.square.lives) + 1;
 			this.square.kill()
 		}
 	}
