@@ -261,6 +261,10 @@ Square.prototype.tick = function(length) {
 					var hitx = x + this.tilewidth;
 					var hity = y + 1
 
+					if (this.mirror) {
+						hitx = x - this.tilewidth;
+					}
+
 					this.level.circles.forEach(function (circle) {
 						if (circle.collides(hitx, hity, width - this.tilewidth, this.tileheight - 2)) {
 							circle.kill();
@@ -318,6 +322,7 @@ Square.prototype.tick = function(length) {
 
 	if (this.level.ending || (this.level.ending && this.level.over)) {
 		var frame = this.currentanimation.frames[this.currentframe];
+		var tile = this.tiles[frame.tile];
 		this.animationtimer += length;
 
 		if (this.animationrunning) {
@@ -392,13 +397,15 @@ Square.prototype.draw = function(gamewindow) {
 		var tileset = this.tilesets[tile.set];
 		var width = tileset.width;
 		var height = tileset.height;
-		var x = this.x - frame.points[0].x - gamewindow.x;
-		var y = this.y - frame.points[0].y - gamewindow.y;
+		var x = - frame.points[0].x;
+		var y = - frame.points[0].y;
+
+		context.save();
+		context.translate(this.x - gamewindow.x, this.y - gamewindow.y);
 
 		if (this.mirror) {
 			context.save();
 			context.scale(-1, 1);
-			x = -x - 1.5 * this.tilewidth;
 		}
 
 		context.drawImage(tileset.image, tile.x, tile.y, width, height, x, y, width, height);
@@ -406,5 +413,7 @@ Square.prototype.draw = function(gamewindow) {
 		if (this.mirror) {
 			context.restore();
 		}
+
+		context.restore();
 	}
 };

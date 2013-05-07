@@ -264,8 +264,8 @@ Level.prototype.tick = function(length) {
 		this.square.tick(length);
 
 		if (keydown[keys.r]) {
-			this.square.kill()
 			this.square.lives += 1;
+			this.square.kill()
 		}
 	}
 };
