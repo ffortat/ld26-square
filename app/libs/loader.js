@@ -66,6 +66,25 @@ var load = (function() {
 		}
 	}
 
+	function loadaudio(uri, callback) {
+				console.log('loading')
+		if (loaded[uri] === undefined) {
+			loading.push(uri);
+			var audio = new Audio();
+			audio.autoplay = false;
+			audio.addEventListener('canplay', function () {
+				setloaded(uri, audio);
+				call(callback, audio);
+				console.log('loaded')
+			});
+			audio.src = uri;
+		} else {
+				console.log('loaded')
+			call(callback, loaded[uri]);
+		}
+			console.log(loading)
+	}
+
 	function whenready(callback) {
 		next.ready.push(callback);
 		checkready();
@@ -84,6 +103,7 @@ var load = (function() {
 	return {
 		json : loadjson,
 		image : loadimage,
+		audio : loadaudio,
 		ready : whenready,
 		error : whenerror,
 		on : addlistener

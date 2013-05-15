@@ -9,6 +9,7 @@ function Level(name) {
 		h : 480
 	};
 
+	this.music = new Audio();
 	this.tiles = {};
 	this.tilesets = [];
 	this.layers = [];
@@ -51,6 +52,10 @@ Level.prototype.init = function(level) {
 	var circleid = -1;
 	var finishid = -1;
 	var endid = -1;
+
+	audio.music('audio/square-background.wav', function (music) {
+		self.music = music;
+	});
 
 	this.json = level;
 

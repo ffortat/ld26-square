@@ -9,6 +9,7 @@ function Square(x, y, lives, level) {
 	this.x = x * this.tilewidth + this.tilewidth / 2;
 	this.y = y * this.tileheight + this.tileheight / 2;
 
+	this.sfx = new Audio();
 	this.animations = {};
 	this.currentanimation = '';
 	this.currentframe = 0;
@@ -42,6 +43,10 @@ function Square(x, y, lives, level) {
 
 Square.prototype.init = function(data) {
 	var self = this;
+
+	audio.sfx('audio/run.wav', function (sfx) {
+		self.sfx = sfx;
+	});
 
 	this.animations = data.animations;
 	this.currentanimation = this.animations[data.default];
@@ -207,6 +212,9 @@ Square.prototype.tick = function(length) {
 
 						if (collision.collides || this.falling) {
 							this.switchtoanim(states.standing);
+							if (collision.collides) {
+								this.sfx.play();
+							}
 						} else {
 							this.switchtoanim(states.falling);
 						}
@@ -304,6 +312,7 @@ Square.prototype.tick = function(length) {
 					var realy = (Math.floor(Math.round(y) / this.tileheight) + row) * this.tileheight;
 					this.y = realy - tile.height + frame.points[0].y;
 					this.falling = false;
+					this.sfx.play();
 				}
 
 				y = this.y - this.tileheight / 2;

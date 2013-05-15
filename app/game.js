@@ -20,6 +20,8 @@ Game.prototype.init = function(level) {
 		setTimeout(function () {
 			self.init('level1');
 			self.loose = true;
+			self.level.music.pause();
+			self.level.music.currentTime = 0;
 			setTimeout(function () {
 				current = menu;
 				self.loose = false;
@@ -31,8 +33,12 @@ Game.prototype.init = function(level) {
 		if (self.levels === self.currentlevel) {
 			self.currentlevel = 1;
 			self.win = true;
+			self.level.music.pause();
+			self.level.music.currentTime = 0;
 		} else {
 			self.currentlevel += 1;
+			self.level.music.pause();
+			self.level.music.currentTime = 0;
 			self.init('level' + self.currentlevel);
 			self.startlevel();
 		}
@@ -49,6 +55,7 @@ Game.prototype.startlevel = function() {
 	this.intro = true;
 	setTimeout(function () {
 		self.intro = false;
+		self.level.music.play();
 	}, 1000);
 };
 
