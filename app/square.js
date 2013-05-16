@@ -22,14 +22,14 @@ function Square(x, y, lives, level) {
 	this.tiles = {};
 
 	this.jump = {
-		height : -1.8 * this.tileheight,
+		height : -2.2 * this.tileheight,
 		length : 166
 	}
 	this.falling = false;
 	this.fall = {
 		height : 0,
 		length : 0,
-		gravity : 1500,
+		gravity : 2500,
 		velocity : 0
 	};
 	this.state = states.standing;
@@ -236,6 +236,12 @@ Square.prototype.tick = function(length) {
 						}
 					}, this);
 
+					var str = '' + this.falling + "\t";
+					collision.tiles.forEach(function (tile) {
+						str += tile + ' ';
+					});
+					console.log(str)
+
 					if (collision.collides) {
 						var previousy = this.y;
 						var row = 0;
@@ -252,15 +258,28 @@ Square.prototype.tick = function(length) {
 						} else {
 							var realy = (Math.floor(Math.round(y) / this.tileheight) + row) * this.tileheight;
 							this.y = realy - tile.height + frame.points[0].y;
+							this.falling = false;
 						}
 
 						y = this.y - this.tileheight / 2;
+					} else if (!this.falling) {
+						this.falling = true;
+						this.resetfall();
+						if (this.jump.length > 0) {
+							this.fall.velocity = this.jump.height / (this.jump.length / 1000);
+						}
 					}
 
 					if (!this.animationrunning) {
-						this.switchtoanim(states.falling);
-						if (this.jump.length > 0) {
-							this.fall.velocity = this.jump.height / (this.jump.length / 1000);
+						if (this.falling) {
+							console.log('already falling')
+							this.switchtoanim(states.standing);
+						} else {
+							console.log('start falling')
+							this.switchtoanim(states.falling);
+							if (this.jump.length > 0) {
+								this.fall.velocity = this.jump.height / (this.jump.length / 1000);
+							}
 						}
 					}
 				} else if (this.state === states.attacking) {
