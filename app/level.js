@@ -126,17 +126,23 @@ Level.prototype.init = function(level) {
 		}
 	}, this);
 
-	this.on('kill', function (type) {
+	this.on('kill', function (type, fake) {
 		if (type === 'square') {
-			if (self.square.lives > 0) {
-				setTimeout(function () {
-					self.square.x = self.origin.x;
-					self.square.y = self.origin.y;
-					self.updatecamera(self.origin.x, self.origin.y);
-					self.square.dead = false;
-				}, 1000);
+			if (fake) {
+				self.square.x = self.origin.x;
+				self.square.y = self.origin.y;
+				self.updatecamera(self.origin.x, self.origin.y);
 			} else {
-				self.loose();
+				if (self.square.lives > 0) {
+					setTimeout(function () {
+						self.square.x = self.origin.x;
+						self.square.y = self.origin.y;
+						self.updatecamera(self.origin.x, self.origin.y);
+						self.square.dead = false;
+					}, 1000);
+				} else {
+					self.loose();
+				}
 			}
 		}
 	});
@@ -269,8 +275,7 @@ Level.prototype.tick = function(length) {
 		this.square.tick(length);
 
 		if (keydown[keys.r]) {
-			this.square.lives = parseInt(this.square.lives) + 1;
-			this.square.kill()
+			this.square.kill(true)
 		}
 	}
 };

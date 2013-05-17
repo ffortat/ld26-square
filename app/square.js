@@ -135,14 +135,18 @@ Square.prototype.resetfall = function() {
 	this.falling = true;
 };
 
-Square.prototype.kill = function() {
-	this.dead = true;
-	this.lives -= 1;
+Square.prototype.kill = function(fake) {
 	this.switchtoanim(states.standing);
 	this.animationrunning = false;
 	this.falling = false;
+
+	if (!fake) {
+		this.dead = true;
+		this.lives -= 1;
+	}
+
 	this.level.listeners.kill.forEach(function (listener) {
-		listener('square');
+		listener('square', fake);
 	});
 };
 
