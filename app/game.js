@@ -129,9 +129,13 @@ Game.prototype.draw = function() {
 		context.font = '100px Arial';
 		context.fillStyle = '#000000';
 		context.textAlign = 'center';
-		context.textBaseline = 'middle';
+		context.textBaseline = 'bottom';
 
 		context.fillText('PAUSE', canvas.width / 2, canvas.height / 2);
+
+		context.font = '25px Arial';
+		context.textBaseline = 'top';
+		context.fillText('Press Escape to resume', canvas.width / 2, canvas.height / 2);
 	} else {
 		this.level.draw();
 		this.hud.draw();
