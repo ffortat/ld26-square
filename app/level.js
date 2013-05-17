@@ -214,7 +214,8 @@ Level.prototype.collides = function(x, y, width, height) {
 	cols = tx - x + 1;
 
 	function checkcollisions(id, layer) {
-		return (layer.visible && layer.data[id] !== 0 && !self.finishline[layer.data[id]]);
+		return ((layer.visible && layer.properties.collisions === 'yes') && 
+						layer.data[id] !== 0 && !self.finishline[layer.data[id]]);
 	}
 
 	for (var i = 0; i < rows; i +=1) {
