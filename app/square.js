@@ -245,7 +245,6 @@ Square.prototype.tick = function(length) {
 					}, this);
 
 					if (collision.collides) {
-						var previousy = this.y;
 						var row = 0;
 						collision.tiles.some(function (line, index) {
 							row = index;
@@ -283,8 +282,36 @@ Square.prototype.tick = function(length) {
 						}
 					}
 				} else if (this.state === states.attacking) {
-					width = tile.width - frame.points[0].y + this.tilewidth / 2;
+					width = tile.width - frame.points[0].x + this.tilewidth / 2;
+
+					if (this.mirror) {
+						x -= (width - this.tilewidth)
+					}
+
 					collision = this.level.collides(x, y, width, this.tileheight);
+
+					if (collision.collides) {
+						var col = 0;
+						collision.tiles.some(function (line) {
+							return line.some(function (column, index) {
+								col = index;
+								return column;
+							}, this);
+						}, this);
+
+						if (col === 0) {
+							if (this.mirror) {
+								var realx = (Math.floor(Math.round(x) / this.tilewidth) + 1) * this.tilewidth;
+								this.x = realx + width - this.tilewidth / 2;
+								x = realx;
+							}
+						} else {
+							var realx = (Math.floor(Math.round(x) / this.tilewidth) + col) * this.tilewidth;
+							this.x = realx - tile.width + frame.points[0].x;
+							x = this.x - this.tilewidth / 2;
+						}
+					}
+
 					var hitx = x + this.tilewidth;
 					var hity = y + 1
 
@@ -306,8 +333,6 @@ Square.prototype.tick = function(length) {
 		}
 
 		if (this.falling) {
-			var previousy = this.y;
-
 			this.fall.length += length;
 			this.y = this.fall.height + this.fall.velocity * this.fall.length / 1000 + this.fall.gravity * Math.pow(this.fall.length / 1000, 2) / 2;
 			y = this.y - this.tileheight / 2;
