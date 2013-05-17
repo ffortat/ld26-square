@@ -69,6 +69,7 @@ Game.prototype.tick = function(length) {
 		if (keydown[keys.escape]) {
 			current = menu;
 			this.win = false;
+			this.init('level' + this.currentlevel);
 		}
 	}
 
