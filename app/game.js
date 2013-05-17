@@ -34,11 +34,11 @@ Game.prototype.init = function(level) {
 			self.currentlevel = 1;
 			self.win = true;
 			self.level.music.pause();
-			self.level.music.currentTime = 0;
+			// self.level.music.currentTime = 0;
 		} else {
 			self.currentlevel += 1;
 			self.level.music.pause();
-			self.level.music.currentTime = 0;
+			// self.level.music.currentTime = 0;
 			self.init('level' + self.currentlevel);
 			self.startlevel();
 		}
