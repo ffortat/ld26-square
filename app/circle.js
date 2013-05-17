@@ -31,6 +31,9 @@ Circle.prototype.collides = function(x, y, width, height) {
 		y : 0
 	}
 
+	width -= 1;
+	height -= 1;
+
 	if (cx < x) {
 		point.x = x;
 	} else if (cx > x + width) {

@@ -316,7 +316,7 @@ Square.prototype.tick = function(length) {
 					var hity = y + 1
 
 					if (this.mirror) {
-						hitx = x - this.tilewidth;
+						hitx = x - 2 * this.tilewidth + width;
 					}
 
 					this.level.circles.forEach(function (circle) {
