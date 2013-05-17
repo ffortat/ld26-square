@@ -44,6 +44,10 @@ Game.prototype.init = function(level) {
 			self.startlevel();
 		}
 	});
+
+	window.addEventListener('blur', function () {
+		self.pause();
+	});
 };
 
 Game.prototype.launch = function(level) {
