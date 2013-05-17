@@ -22,14 +22,14 @@ function Square(x, y, lives, level) {
 	this.tiles = {};
 
 	this.jump = {
-		height : -2.2 * this.tileheight,
+		height : -1.8 * this.tileheight,
 		length : 166
 	}
 	this.falling = false;
 	this.fall = {
 		height : 0,
 		length : 0,
-		gravity : 2500,
+		gravity : 1500,
 		velocity : 0
 	};
 	this.state = states.standing;
@@ -38,15 +38,18 @@ function Square(x, y, lives, level) {
 	this.dead = false;
 	this.loaded = false;
 
+	this.runstart = 0;
+	this.runlast = 0;
+
 	load.json('animations/square.json', function (data) {self.init(data);});
 }
 
 Square.prototype.init = function(data) {
 	var self = this;
 
-	audio.sfx('audio/run.wav', function (sfx) {
-		self.sfx = sfx;
-	});
+	// audio.sfx('audio/run.wav', function (sfx) {
+	// 	self.sfx = sfx;
+	// });
 
 	this.animations = data.animations;
 	this.currentanimation = this.animations[data.default];
@@ -87,6 +90,10 @@ Square.prototype.switchtoanim = function(state, mirror) {
 	if (state === states.running) {
 		this.forward = !mirror;
 		canswitch = (this.state === states.standing);
+		if (canswitch) {
+			this.runstart = new Date().getTime();
+			this.runlast = this.runstart;
+		}
 	} else if (state === states.standing) {
 		canswitch = true;
 	} else if (state === states.jumping) {
@@ -150,7 +157,7 @@ Square.prototype.tick = function(length) {
 		var width = 0;
 		var height = 0;
 		var collision = {};
-		this.animationtimer += length;
+		this.animationtimer += Math.min(1000/60, length);
 
 		if (keydown[keys.x]) {
 			dy = this.tileheight / 2;
@@ -183,7 +190,7 @@ Square.prototype.tick = function(length) {
 
 		if (this.animationrunning) {
 			if (this.animationtimer >= this.framelength) {
-				this.animationtimer = 0;
+				this.animationtimer -= 1000/60;
 				this.currentframe += 1;
 
 				if (this.currentframe >= this.currentanimation.frames.length) {
@@ -199,6 +206,7 @@ Square.prototype.tick = function(length) {
 				tile = this.tiles[frame.tile];
 
 				if (this.state === states.running) {
+					this.runlast = new Date().getTime();
 					if (this.mirror) {
 						this.x -= this.tilewidth / this.currentanimation.frames.length;
 					} else {
@@ -236,12 +244,6 @@ Square.prototype.tick = function(length) {
 						}
 					}, this);
 
-					var str = '' + this.falling + "\t";
-					collision.tiles.forEach(function (tile) {
-						str += tile + ' ';
-					});
-					console.log(str)
-
 					if (collision.collides) {
 						var previousy = this.y;
 						var row = 0;
@@ -272,10 +274,8 @@ Square.prototype.tick = function(length) {
 
 					if (!this.animationrunning) {
 						if (this.falling) {
-							console.log('already falling')
 							this.switchtoanim(states.standing);
 						} else {
-							console.log('start falling')
 							this.switchtoanim(states.falling);
 							if (this.jump.length > 0) {
 								this.fall.velocity = this.jump.height / (this.jump.length / 1000);
@@ -415,6 +415,12 @@ Square.prototype.tick = function(length) {
 
 		this.level.checkend(this.x, this.y);
 		this.level.updatecamera(this.x, this.y);
+	}
+
+	length -= 1000/60;
+
+	if (length > 0) {
+		this.tick(length);
 	}
 };
 

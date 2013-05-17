@@ -53,9 +53,9 @@ Level.prototype.init = function(level) {
 	var finishid = -1;
 	var endid = -1;
 
-	audio.music('audio/square-background.wav', function (music) {
-		self.music = music;
-	});
+	// audio.music('audio/square-background.wav', function (music) {
+	// 	self.music = music;
+	// });
 
 	this.json = level;
 

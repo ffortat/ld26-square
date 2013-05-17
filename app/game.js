@@ -21,7 +21,7 @@ Game.prototype.init = function(level) {
 			self.init('level1');
 			self.loose = true;
 			self.level.music.pause();
-			self.level.music.currentTime = 0;
+			// self.level.music.currentTime = 0;
 			setTimeout(function () {
 				current = menu;
 				self.loose = false;
