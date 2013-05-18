@@ -133,7 +133,7 @@ Game.prototype.draw = function() {
 
 		context.fillText('PAUSE', canvas.width / 2, canvas.height / 2);
 
-		context.font = '25px Arial';
+		context.font = '30px Arial';
 		context.textBaseline = 'top';
 		context.fillText('Press Escape to resume', canvas.width / 2, canvas.height / 2);
 	} else {
