@@ -8,10 +8,11 @@ all : www/square.js
 www/square.global.js : \
 	app/libs/ajax.js \
 	app/libs/loader.js \
+	app/libs/audio.js \
 	app/canvas.js \
 	app/states.js \
-	app/square.js \
 	app/controls.js \
+	app/square.js \
 	app/circle.js \
 	app/hud.js \
 	app/level.js \
@@ -39,6 +40,7 @@ www/square.js : www/square.global.js
 	cp app/images/square-jump.png www/images/
 	cp app/images/square.png www/images/
 	cp app/images/truck.png www/images/
+	cp app/images/tutorial.png www/images/
 	cp app/styles.css www/
 
 clean :
