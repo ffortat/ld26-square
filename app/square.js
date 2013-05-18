@@ -330,7 +330,15 @@ Square.prototype.tick = function(length) {
 					}, this);
 
 					if (!this.animationrunning) {
-						this.switchtoanim(states.standing);
+						x = this.x - this.tilewidth / 2;
+						dy = this.tileheight / 2;
+						collision = this.level.collides(x, y + dy, this.tilewidth, this.tileheight);
+
+						if (collision.collides) {
+							this.switchtoanim(states.standing);
+						} else {
+							this.switchtoanim(states.falling);
+						}
 					}
 				}
 			}
